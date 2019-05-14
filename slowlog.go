@@ -4,14 +4,12 @@ import (
 	"bufio"
 	"fmt"
 	"github.com/pkg/errors"
+	hack "github.com/tsthght/Ti_slowlog_parse/hack"
 	"io"
 	"os"
-	"reflect"
 	"strconv"
 	"strings"
 	"time"
-	"github.com/Ti_slowlog_parse/hack"
-	"unsafe"
 )
 
 const (
@@ -280,7 +278,7 @@ func copySlowQueryTuple(ptr *slowQueryTuple) slowQueryTuple {
 	}
 }
 
-func formatSlowQueryTuple(st slowQueryTuple) string {
+func FormatSlowQueryTuple(st slowQueryTuple) string {
 	return fmt.Sprintf("%v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v, %v",
 		st.time, st.txnStartTs,
 		st.user, st.connID,
@@ -293,7 +291,7 @@ func formatSlowQueryTuple(st slowQueryTuple) string {
 		st.sql)
 }
 
-func parseSlowLogFile(tz *time.Location, filePath string) ([]slowQueryTuple, error) {
+func ParseSlowLogFile(tz *time.Location, filePath string) ([]slowQueryTuple, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
 		return nil, err
@@ -318,7 +316,7 @@ func parseSlowLog(tz *time.Location, reader *bufio.Reader) ([]slowQueryTuple, er
 			}
 			return rows, err
 		}
-		line := string(String(lineByte))
+		line := string(hack.String(lineByte))
 		if !startFlag && strings.HasPrefix(line, SlowLogStartPrefixStr) {
 			st = &slowQueryTuple{}
 			err = st.setFieldValue(tz, SlowLogTimeStr, line[len(SlowLogStartPrefixStr):])

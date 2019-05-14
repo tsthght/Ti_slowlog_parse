@@ -42,7 +42,7 @@ select * from t;`)
 
 		fmt.Printf("## %s", recordString)
 		*/
-		fmt.Printf("format: %s", formatSlowQueryTuple(row))
+		fmt.Printf("format: %s", FormatSlowQueryTuple(row))
 	}
 
 }
